@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NotYet">
         <activity
-            android:name=".MainActivity"
+            android:name=".ClockActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
