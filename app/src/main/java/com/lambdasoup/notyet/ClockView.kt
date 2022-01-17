@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
+import java.time.LocalDateTime
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -15,12 +16,16 @@ class ClockView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
-    private var dialOuterRadius: Float = 0f
     private var cx: Float = 0f
     private var cy: Float = 0f
+    private var dialOuterRadius: Float = 0f
     private var dialInnerRadius: Float = 0f
     private var tickInnerRadius: Float = 0f
     private var textCenterRadius: Float = 0f
+    private var hourHandRadius: Float = 0f
+    private var minuteHandRadius: Float = 0f
+
+    private var currTime = LocalDateTime.now()
 
     private var textPaint = TextPaint().apply {
         isAntiAlias = true
@@ -38,6 +43,18 @@ class ClockView @JvmOverloads constructor(
     }
     private var backgroundPaint = Paint().apply {
         color = Color.RED
+    }
+    private var hourHandPaint = Paint().apply {
+        isAntiAlias = true
+        color = Color.WHITE
+        style = Paint.Style.STROKE
+        strokeCap = Paint.Cap.ROUND
+    }
+    private var minuteHandPaint = Paint().apply {
+        isAntiAlias = true
+        color = Color.WHITE
+        style = Paint.Style.STROKE
+        strokeCap = Paint.Cap.ROUND
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
@@ -58,6 +75,14 @@ class ClockView @JvmOverloads constructor(
             baselineShift = (textSize / 2 - descent()).toInt()
         }
         tickPaint.strokeWidth = size * 0.01f
+        minuteHandRadius = size * 0.26f
+        hourHandRadius = size * 0.2f
+        minuteHandPaint.apply {
+            strokeWidth = size * 0.01f
+        }
+        hourHandPaint.apply {
+            strokeWidth = size * 0.02f
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -85,5 +110,23 @@ class ClockView @JvmOverloads constructor(
                 textPaint
             )
         }
+
+        val currMinute = currTime.minute
+        canvas.drawLine(
+            cx,
+            cy,
+            cx + minuteHandRadius * cos(Math.PI / 30 * (currMinute - 15)).toFloat(),
+            cy + minuteHandRadius * sin(Math.PI / 30 * (currMinute - 15)).toFloat(),
+            minuteHandPaint
+        )
+
+        val currHour = (currTime.hour % 12) + currMinute / 60f
+        canvas.drawLine(
+            cx,
+            cy,
+            cx + hourHandRadius * cos(Math.PI / 6 * (currHour - 3)).toFloat(),
+            cy + hourHandRadius * sin(Math.PI / 6 * (currHour - 3)).toFloat(),
+            hourHandPaint
+        )
     }
 }
