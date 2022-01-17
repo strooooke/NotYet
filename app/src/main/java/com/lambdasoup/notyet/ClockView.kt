@@ -1,6 +1,9 @@
 package com.lambdasoup.notyet
 
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -55,6 +58,31 @@ class ClockView @JvmOverloads constructor(
         color = Color.WHITE
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
+    }
+
+    private val timeChangeReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            onTimeChanged()
+        }
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        context.registerReceiver(
+            timeChangeReceiver,
+            IntentFilter().apply {
+                addAction(Intent.ACTION_TIME_TICK)
+                addAction(Intent.ACTION_TIME_CHANGED)
+                addAction(Intent.ACTION_TIMEZONE_CHANGED)
+            }
+        )
+
+        onTimeChanged()
+    }
+
+    override fun onDetachedFromWindow() {
+        context.unregisterReceiver(timeChangeReceiver)
+        super.onDetachedFromWindow()
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
@@ -128,5 +156,10 @@ class ClockView @JvmOverloads constructor(
             cy + hourHandRadius * sin(Math.PI / 6 * (currHour - 3)).toFloat(),
             hourHandPaint
         )
+    }
+
+    private fun onTimeChanged() {
+        currTime = LocalDateTime.now()
+        invalidate()
     }
 }
