@@ -35,13 +35,13 @@ class ClockView @JvmOverloads constructor(
 
     private var currTime = LocalDateTime.now()
 
-    var targetTime = LocalDateTime.MAX
+    var targetTime: LocalDateTime = LocalDateTime.MAX
     set(value) {
         field = value
         onTimeChanged()
     }
 
-    var closeToTargetTime = LocalDateTime.MAX
+    var closeToTargetTime: LocalDateTime = LocalDateTime.MAX
     set(value) {
         field = value
         onTimeChanged()
@@ -168,8 +168,10 @@ class ClockView @JvmOverloads constructor(
 
         drawDial(canvas)
 
-        val ghostHandsColor = mixRgb(backgroundPaint.color, dialColor)
-        drawHands(canvas, targetTime.toLocalTime(), ghostHandsColor)
+        if (currTime < targetTime) {
+            val ghostHandsColor = mixRgb(backgroundPaint.color, dialColor)
+            drawHands(canvas, targetTime.toLocalTime(), ghostHandsColor)
+        }
         drawHands(canvas, currTime.toLocalTime(), dialColor)
     }
 
