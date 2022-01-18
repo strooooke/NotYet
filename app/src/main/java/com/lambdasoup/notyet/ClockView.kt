@@ -10,7 +10,12 @@ import android.graphics.Paint
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
+import androidx.annotation.ColorInt
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 import java.time.LocalDateTime
+import java.time.LocalTime
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -30,18 +35,33 @@ class ClockView @JvmOverloads constructor(
 
     private var currTime = LocalDateTime.now()
 
+    var targetTime = LocalDateTime.MAX
+    set(value) {
+        field = value
+        onTimeChanged()
+    }
+
+    @ColorInt var dialColor = Color.WHITE
+    set(value) {
+        field = value
+        textPaint.color = value
+        dialPaint.color = value
+        tickPaint.color = value
+        invalidate()
+    }
+
     private var textPaint = TextPaint().apply {
         isAntiAlias = true
-        color = Color.WHITE
+        color = dialColor
         textAlign = Paint.Align.CENTER
     }
     private var dialPaint = Paint().apply {
         isAntiAlias = true
-        color = Color.WHITE
+        color = dialColor
     }
     private var tickPaint = Paint().apply {
         isAntiAlias = true
-        color = Color.WHITE
+        color = dialColor
         style = Paint.Style.STROKE
     }
     private var backgroundPaint = Paint().apply {
@@ -49,13 +69,11 @@ class ClockView @JvmOverloads constructor(
     }
     private var hourHandPaint = Paint().apply {
         isAntiAlias = true
-        color = Color.WHITE
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
     }
     private var minuteHandPaint = Paint().apply {
         isAntiAlias = true
-        color = Color.WHITE
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
     }
@@ -114,6 +132,36 @@ class ClockView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
+        drawDial(canvas)
+
+        val ghostHandsColor = mixRgb(backgroundPaint.color, dialColor)
+        drawHands(canvas, targetTime.toLocalTime(), ghostHandsColor)
+        drawHands(canvas, currTime.toLocalTime(), dialColor)
+    }
+
+    private fun drawHands(canvas: Canvas, time: LocalTime, @ColorInt color: Int) {
+        val currMinute = time.minute
+        minuteHandPaint.color = color
+        canvas.drawLine(
+            cx,
+            cy,
+            cx + minuteHandRadius * cos(Math.PI / 30 * (currMinute - 15)).toFloat(),
+            cy + minuteHandRadius * sin(Math.PI / 30 * (currMinute - 15)).toFloat(),
+            minuteHandPaint
+        )
+
+        val currHour = (time.hour % 12) + currMinute / 60f
+        hourHandPaint.color = color
+        canvas.drawLine(
+            cx,
+            cy,
+            cx + hourHandRadius * cos(Math.PI / 6 * (currHour - 3)).toFloat(),
+            cy + hourHandRadius * sin(Math.PI / 6 * (currHour - 3)).toFloat(),
+            hourHandPaint
+        )
+    }
+
+    private fun drawDial(canvas: Canvas) {
         canvas.drawCircle(cx, cy, dialOuterRadius, dialPaint)
         canvas.drawCircle(cx, cy, dialInnerRadius, backgroundPaint)
 
@@ -138,28 +186,18 @@ class ClockView @JvmOverloads constructor(
                 textPaint
             )
         }
-
-        val currMinute = currTime.minute
-        canvas.drawLine(
-            cx,
-            cy,
-            cx + minuteHandRadius * cos(Math.PI / 30 * (currMinute - 15)).toFloat(),
-            cy + minuteHandRadius * sin(Math.PI / 30 * (currMinute - 15)).toFloat(),
-            minuteHandPaint
-        )
-
-        val currHour = (currTime.hour % 12) + currMinute / 60f
-        canvas.drawLine(
-            cx,
-            cy,
-            cx + hourHandRadius * cos(Math.PI / 6 * (currHour - 3)).toFloat(),
-            cy + hourHandRadius * sin(Math.PI / 6 * (currHour - 3)).toFloat(),
-            hourHandPaint
-        )
     }
 
     private fun onTimeChanged() {
         currTime = LocalDateTime.now()
         invalidate()
     }
+}
+
+@ColorInt private fun mixRgb(@ColorInt c1: Int, @ColorInt c2: Int): Int {
+    val r = (c1.red + c2.red) / 2
+    val g = (c1.green + c2.green) / 2
+    val b = (c1.blue + c2.blue) / 2
+    val a = 0xff
+    return (a shl 24) + (r shl 16) + (g shl 8) + b
 }
