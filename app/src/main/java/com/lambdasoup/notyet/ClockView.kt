@@ -41,6 +41,30 @@ class ClockView @JvmOverloads constructor(
         onTimeChanged()
     }
 
+    var closeToTargetTime = LocalDateTime.MAX
+    set(value) {
+        field = value
+        onTimeChanged()
+    }
+
+    @ColorInt var farFromTargetBackgroundColor = Color.RED
+    set(value) {
+        field = value
+        invalidate()
+    }
+
+    @ColorInt var closeToTargetBackgroundColor = Color.YELLOW
+    set(value) {
+        field = value
+        invalidate()
+    }
+
+    @ColorInt var targetBackgroundColor = Color.GREEN
+    set(value) {
+        field = value
+        invalidate()
+    }
+
     @ColorInt var dialColor = Color.WHITE
     set(value) {
         field = value
@@ -132,6 +156,16 @@ class ClockView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
+        if (closeToTargetTime > targetTime) {
+            throw IllegalStateException("Target time $targetTime should not be before closeToTargetTime $closeToTargetTime")
+        }
+
+        backgroundPaint.color = when {
+            currTime < closeToTargetTime -> farFromTargetBackgroundColor
+            currTime < targetTime -> closeToTargetBackgroundColor
+            else -> targetBackgroundColor
+        }
+
         drawDial(canvas)
 
         val ghostHandsColor = mixRgb(backgroundPaint.color, dialColor)
