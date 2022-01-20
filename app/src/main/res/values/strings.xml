@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">NotYet</string>
-    <string name="start_button">Start</string>
+    <string name="app_name">Not Yet</string>
     <string name="initial_bg_color_label">Initially, the color is</string>
     <string name="target_time_label">At</string>
     <string name="target_bg_color_label">color will change to</string>
     <string name="pre_target_minutes_label">minutes before that,</string>
     <string name="pre_target_bg_color_label">the color will change to</string>
     <string name="dial_color_label">The color of the digits and hands will be</string>
+    <string name="start_button">Start</string>
 </resources>

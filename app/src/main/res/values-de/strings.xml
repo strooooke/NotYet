@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Noch Nicht</string>
+    <string name="start_button">Start</string>
+    <string name="initial_bg_color_label">Zuerst ist die Hintergrundfarbe</string>
+    <string name="target_time_label">Um</string>
+    <string name="target_bg_color_label">ändert sich die Farbe zu</string>
+    <string name="pre_target_minutes_label">Minute davor</string>
+    <string name="pre_target_bg_color_label">ändert sich die Farbe zu</string>
+    <string name="dial_color_label">Die Farbe der Ziffern und Zeiger ist</string>
+</resources>
