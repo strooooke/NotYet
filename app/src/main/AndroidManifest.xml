@@ -19,7 +19,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ClockActivity"/>
+        <activity android:name=".ClockActivity"
+            android:turnScreenOn="true"
+            android:showWhenLocked="true"/>
     </application>
 
 </manifest>

@@ -2,8 +2,10 @@ package com.lambdasoup.notyet
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.annotation.ColorInt
 import java.time.LocalDateTime
 
@@ -11,6 +13,13 @@ class ClockActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_clock)
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1) {
+            // set via manifest attributes if API level high enough
+            window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+            window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
+        }
 
         findViewById<ClockView>(R.id.clock).apply {
             (intent.getSerializableExtra(CLOSE_TO_TARGET_TIME) as LocalDateTime?)?.let {
