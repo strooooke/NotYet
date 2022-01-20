@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.annotation.ColorInt
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import java.time.LocalDateTime
 
 class ClockActivity : AppCompatActivity() {
@@ -21,6 +24,11 @@ class ClockActivity : AppCompatActivity() {
             // set via manifest attributes if API level high enough
             window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
             window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
+        }
+
+        ViewCompat.getWindowInsetsController(window.decorView)?.let {
+            it.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            it.hide(WindowInsetsCompat.Type.statusBars())
         }
 
         deviceAdmin = DeviceAdmin(applicationContext)
