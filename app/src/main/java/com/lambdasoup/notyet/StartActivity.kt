@@ -1,12 +1,12 @@
 package com.lambdasoup.notyet
 
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.toColorInt
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.button.MaterialButton
 import com.skydoves.colorpickerview.ColorPickerDialog
@@ -18,6 +18,13 @@ import kotlin.reflect.KMutableProperty0
 
 
 private val TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm")
+
+private const val PREF_KEY_TARGET_TIME = "target_time"
+private const val PREF_KEY_PRE_TARGET_MINUTES = "pre_target_minutes"
+private const val PREF_KEY_INITIAL_BG_COLOR = "initial_bg_color"
+private const val PREF_KEY_PRE_TARGET_BG_COLOR = "pre_target_bg_color"
+private const val PREF_KEY_TARGET_BG_COLOR = "target_bg_color"
+private const val PREF_KEY_DIAL_COLOR = "dial_color"
 
 class StartActivity : AppCompatActivity() {
     private lateinit var targetTime: LocalTime
@@ -77,7 +84,7 @@ class StartActivity : AppCompatActivity() {
         }
 
         findViewById<MaterialButton>(R.id.start_button).setOnClickListener {
-            it.requestFocus()
+            persistModel()
             startClock()
         }
 
@@ -106,13 +113,26 @@ class StartActivity : AppCompatActivity() {
     }
 
     private fun initModel() {
-        targetTime = LocalTime.now()
-        preTargetMinutes = 1
+        val prefs = getPreferences(MODE_PRIVATE)
 
-        initialBgColor = Color.RED
-        preTargetBgColor = Color.YELLOW
-        targetBgColor = Color.GREEN
-        dialColor = Color.LTGRAY
+        targetTime = LocalTime.parse(prefs.getString(PREF_KEY_TARGET_TIME, "10:00"))
+        preTargetMinutes = prefs.getInt(PREF_KEY_PRE_TARGET_MINUTES, 5)
+
+        initialBgColor = prefs.getInt(PREF_KEY_INITIAL_BG_COLOR, "#a60020".toColorInt())
+        preTargetBgColor = prefs.getInt(PREF_KEY_PRE_TARGET_BG_COLOR, "#d88000".toColorInt())
+        targetBgColor = prefs.getInt(PREF_KEY_TARGET_BG_COLOR, "#168600".toColorInt())
+        dialColor = prefs.getInt(PREF_KEY_DIAL_COLOR, "#acacac".toColorInt())
+    }
+
+    private fun persistModel() {
+        getPreferences(MODE_PRIVATE).edit()
+            .putString(PREF_KEY_TARGET_TIME, targetTime.format(DateTimeFormatter.ISO_LOCAL_TIME))
+            .putInt(PREF_KEY_PRE_TARGET_MINUTES, preTargetMinutes)
+            .putInt(PREF_KEY_INITIAL_BG_COLOR, initialBgColor)
+            .putInt(PREF_KEY_PRE_TARGET_BG_COLOR, preTargetBgColor)
+            .putInt(PREF_KEY_TARGET_BG_COLOR, targetBgColor)
+            .putInt(PREF_KEY_DIAL_COLOR, dialColor)
+            .apply()
     }
 
     private fun rerender() {
@@ -140,8 +160,12 @@ class StartActivity : AppCompatActivity() {
             }
         }
 
+
         val closeToTargetTime = targetDateTime.minusMinutes(preTargetMinutes.toLong())
-        Log.d("START", "closeToTargetTime=$closeToTargetTime")
+        Log.d("START", "initialBg=${initialBgColor.toUInt().toString(16)}")
+        Log.d("START", "dial=${dialColor.toUInt().toString(16)}")
+        Log.d("START", "preTarget=${preTargetBgColor.toUInt().toString(16)}")
+        Log.d("START", "target=${targetBgColor.toUInt().toString(16)}")
 
         startActivity(
             ClockActivity.getIntent(
