@@ -39,7 +39,11 @@ class StartActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_start)
 
-        initModel()
+        if (savedInstanceState == null) {
+            initModel()
+        } else {
+            restoreInstanceState(savedInstanceState)
+        }
 
         findViewById<MaterialButton>(R.id.target_time).setOnClickListener {
             it.requestFocus()
@@ -89,6 +93,25 @@ class StartActivity : AppCompatActivity() {
         }
 
         rerender()
+    }
+
+    private fun restoreInstanceState(savedInstanceState: Bundle) {
+        targetTime = LocalTime.parse(savedInstanceState.getString(PREF_KEY_TARGET_TIME))
+        preTargetMinutes = savedInstanceState.getInt(PREF_KEY_PRE_TARGET_MINUTES)
+        initialBgColor = savedInstanceState.getInt(PREF_KEY_INITIAL_BG_COLOR)
+        preTargetBgColor = savedInstanceState.getInt(PREF_KEY_PRE_TARGET_BG_COLOR)
+        targetBgColor = savedInstanceState.getInt(PREF_KEY_TARGET_BG_COLOR)
+        dialColor = savedInstanceState.getInt(PREF_KEY_DIAL_COLOR)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(PREF_KEY_TARGET_TIME, targetTime.format(DateTimeFormatter.ISO_LOCAL_TIME))
+        outState.putInt(PREF_KEY_PRE_TARGET_MINUTES, preTargetMinutes)
+        outState.putInt(PREF_KEY_INITIAL_BG_COLOR, initialBgColor)
+        outState.putInt(PREF_KEY_PRE_TARGET_BG_COLOR, preTargetBgColor)
+        outState.putInt(PREF_KEY_TARGET_BG_COLOR, targetBgColor)
+        outState.putInt(PREF_KEY_DIAL_COLOR, dialColor)
     }
 
     private fun showColorPickerFor(colorProperty: KMutableProperty0<Int>) {
