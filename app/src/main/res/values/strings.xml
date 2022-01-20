@@ -7,4 +7,7 @@
     <string name="pre_target_bg_color_label">the color will change to</string>
     <string name="dial_color_label">The color of the digits and hands will be</string>
     <string name="start_button">Start</string>
+    <string name="device_admin_enable">Allow</string>
+    <string name="device_button_enable_explainer">Child-proof the back button</string>
+    <string name="device_admin_needed_explainer">Allow locking the device on back navigation from clock.</string>
 </resources>

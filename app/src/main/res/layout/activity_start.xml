@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -216,6 +217,46 @@
             app:barrierMargin="8dp"
             app:constraint_referenced_ids="dial_color, dial_color_label"/>
 
+        <TextView
+            android:id="@+id/enable_device_admin_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/below_dial_color_barrier"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/enable_device_admin"
+            app:layout_constraintBottom_toBottomOf="@id/enable_device_admin"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintHorizontal_bias="0"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:text="@string/device_button_enable_explainer"
+            android:labelFor="@id/enable_device_admin"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/enable_device_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/enable_device_admin_label"
+            app:layout_constraintBottom_toBottomOf="@id/enable_device_admin_label"
+            app:layout_constraintStart_toEndOf="@id/enable_device_admin_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="8dp"
+            android:text="@string/device_admin_enable"/>
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/enable_device_admin_wrapper"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:constraint_referenced_ids="enable_device_admin_label,enable_device_admin"/>
+
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/below_enable_device_admin_barrier"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:barrierDirection="bottom"
+            app:barrierMargin="8dp"
+            app:constraint_referenced_ids="enable_device_admin, enable_device_admin_label"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/start_button"
@@ -223,7 +264,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/below_dial_color_barrier"
+            app:layout_constraintTop_toBottomOf="@id/below_enable_device_admin_barrier"
             android:text="@string/start_button"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>

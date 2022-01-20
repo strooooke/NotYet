@@ -10,6 +10,8 @@ import androidx.annotation.ColorInt
 import java.time.LocalDateTime
 
 class ClockActivity : AppCompatActivity() {
+    private lateinit var deviceAdmin: DeviceAdmin
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_clock)
@@ -20,6 +22,8 @@ class ClockActivity : AppCompatActivity() {
             window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
             window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
         }
+
+        deviceAdmin = DeviceAdmin(applicationContext)
 
         findViewById<ClockView>(R.id.clock).apply {
             (intent.getSerializableExtra(CLOSE_TO_TARGET_TIME) as LocalDateTime?)?.let {
@@ -41,6 +45,11 @@ class ClockActivity : AppCompatActivity() {
                 targetBackgroundColor = it
             }
         }
+    }
+
+    override fun onBackPressed() {
+        deviceAdmin.lockScreen()
+        super.onBackPressed()
     }
 
     companion object {

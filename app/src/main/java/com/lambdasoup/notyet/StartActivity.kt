@@ -1,8 +1,10 @@
 package com.lambdasoup.notyet
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.EditText
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +19,8 @@ import java.time.format.DateTimeFormatter
 import kotlin.reflect.KMutableProperty0
 
 
+private const val RESULT_ENABLE_DEVICE_ADMIN = 1
+
 private val TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm")
 
 private const val PREF_KEY_TARGET_TIME = "target_time"
@@ -27,6 +31,8 @@ private const val PREF_KEY_TARGET_BG_COLOR = "target_bg_color"
 private const val PREF_KEY_DIAL_COLOR = "dial_color"
 
 class StartActivity : AppCompatActivity() {
+    private lateinit var deviceAdmin: DeviceAdmin
+
     private lateinit var targetTime: LocalTime
     private var preTargetMinutes: Int = 0
     @ColorInt private var initialBgColor: Int = 0
@@ -38,6 +44,8 @@ class StartActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_start)
+
+        deviceAdmin = DeviceAdmin(applicationContext)
 
         if (savedInstanceState == null) {
             initModel()
@@ -92,6 +100,10 @@ class StartActivity : AppCompatActivity() {
             startClock()
         }
 
+        findViewById<MaterialButton>(R.id.enable_device_admin).setOnClickListener {
+            startActivityForResult(deviceAdmin.getEnableIntent(), RESULT_ENABLE_DEVICE_ADMIN)
+        }
+
         rerender()
     }
 
@@ -112,6 +124,13 @@ class StartActivity : AppCompatActivity() {
         outState.putInt(PREF_KEY_PRE_TARGET_BG_COLOR, preTargetBgColor)
         outState.putInt(PREF_KEY_TARGET_BG_COLOR, targetBgColor)
         outState.putInt(PREF_KEY_DIAL_COLOR, dialColor)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            RESULT_ENABLE_DEVICE_ADMIN -> rerender()
+            else -> super.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
     private fun showColorPickerFor(colorProperty: KMutableProperty0<Int>) {
@@ -170,6 +189,8 @@ class StartActivity : AppCompatActivity() {
         findViewById<MaterialButton>(R.id.target_bg_color).backgroundTintList = ColorStateList.valueOf(targetBgColor)
 
         findViewById<MaterialButton>(R.id.dial_color).backgroundTintList = ColorStateList.valueOf(dialColor)
+
+        findViewById<View>(R.id.enable_device_admin_wrapper).visibility = if (deviceAdmin.isEnabled()) View.GONE else View.VISIBLE
     }
 
     private fun startClock() {
