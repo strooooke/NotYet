@@ -13,7 +13,6 @@ import androidx.core.view.WindowInsetsControllerCompat
 import java.time.LocalDateTime
 
 class ClockActivity : AppCompatActivity() {
-    private lateinit var deviceAdmin: DeviceAdmin
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +29,6 @@ class ClockActivity : AppCompatActivity() {
             it.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             it.hide(WindowInsetsCompat.Type.statusBars())
         }
-
-        deviceAdmin = DeviceAdmin(applicationContext)
 
         findViewById<ClockView>(R.id.clock).apply {
             (intent.getSerializableExtra(CLOSE_TO_TARGET_TIME) as LocalDateTime?)?.let {
@@ -53,11 +50,6 @@ class ClockActivity : AppCompatActivity() {
                 targetBackgroundColor = it
             }
         }
-    }
-
-    override fun onBackPressed() {
-        deviceAdmin.lockScreen()
-        super.onBackPressed()
     }
 
     companion object {

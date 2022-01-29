@@ -8,7 +8,4 @@
     <string name="pre_target_minutes_label">Minute davor</string>
     <string name="pre_target_bg_color_label">ändert sich die Farbe zu</string>
     <string name="dial_color_label">Die Farbe der Ziffern und Zeiger ist</string>
-    <string name="device_admin_enable">Erlauben</string>
-    <string name="device_button_enable_explainer">Kindersicherung für Zurück-Button</string>
-    <string name="device_admin_needed_explainer">Sperren des Handys bei Zuruck aus der Uhr</string>
 </resources>
