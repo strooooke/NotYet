@@ -16,3 +16,6 @@ again has the clock visible.)
 
 You'll probably want to either pin the app after starting the clock, or keep your eyes on things until the keyguard kicks in under
 the clock, so that the children won't just press the home button and start watching internet videos.
+
+Using the app is one-shot: Configure the clock to your liking, then start it. Press back (if not pinned) to exit the app, and
+launch it again for another run.
