@@ -222,7 +222,7 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintHorizontal_bias="0"
             style="@style/TextAppearance.AppCompat.Medium"
-            android:text="Zurück beendet die Uhr"
+            android:text="@string/allow_back_nav_label"
             android:labelFor="@id/allow_back_nav"/>
 
         <androidx.appcompat.widget.SwitchCompat

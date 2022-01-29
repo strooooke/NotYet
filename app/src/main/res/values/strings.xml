@@ -7,4 +7,5 @@
     <string name="pre_target_bg_color_label">the color will change to</string>
     <string name="dial_color_label">The color of the digits and hands will be</string>
     <string name="start_button">Start</string>
+    <string name="allow_back_nav_label">\"Back\" exits the clock</string>
 </resources>

@@ -8,4 +8,5 @@
     <string name="pre_target_minutes_label">Minute davor</string>
     <string name="pre_target_bg_color_label">ändert sich die Farbe zu</string>
     <string name="dial_color_label">Die Farbe der Ziffern und Zeiger ist</string>
+    <string name="allow_back_nav_label">\"Zurück\" beendet die Uhr</string>
 </resources>
