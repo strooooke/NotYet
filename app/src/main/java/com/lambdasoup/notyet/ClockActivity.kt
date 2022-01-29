@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.core.view.ViewCompat
@@ -23,6 +24,10 @@ class ClockActivity : AppCompatActivity() {
             // set via manifest attributes if API level high enough
             window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
             window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
+        }
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            window.addFlags(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
         }
 
         ViewCompat.getWindowInsetsController(window.decorView)?.let {
