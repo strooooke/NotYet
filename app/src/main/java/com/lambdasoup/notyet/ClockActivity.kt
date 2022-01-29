@@ -52,6 +52,12 @@ class ClockActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        if (intent.getBooleanExtra(ALLOW_BACK_NAV, true)) {
+            super.onBackPressed()
+        }
+    }
+
     companion object {
         private const val CLOSE_TO_TARGET_TIME = "com.lambdasoup.notyet.ClockActivity_EXTRA_closeToTargetTime"
         private const val TARGET_TIME = "com.lambdasoup.notyet.ClockActivity_EXTRA_targetTime"
@@ -59,11 +65,12 @@ class ClockActivity : AppCompatActivity() {
         private const val FAR_FROM_TARGET_BG_COLOR = "com.lambdasoup.notyet.ClockActivity_EXTRA_farFromTargetBgColor"
         private const val CLOSE_TO_TARGET_BG_COLOR = "com.lambdasoup.notyet.ClockActivity_EXTRA_closeToTargetBgColor"
         private const val TARGET_BG_COLOR = "com.lambdasoup.notyet.ClockActivity_EXTRA_targetBgColor"
+        private const val ALLOW_BACK_NAV = "com.lambdasoup.notyet.ClockActivity_EXTRA_allowBackNavigation"
 
         fun getIntent(
             context: Context, closeToTargetTime: LocalDateTime? = null, targetTime: LocalDateTime? = null,
             @ColorInt dialColor: Int = -1, @ColorInt farFromTargetBgColor: Int = -1, @ColorInt closeToTargetBgColor: Int = -1,
-            @ColorInt targetBgColor: Int = -1
+            @ColorInt targetBgColor: Int = -1, allowBackNavigation: Boolean = true
         ): Intent =
             Intent(context, ClockActivity::class.java)
                 .putExtra(CLOSE_TO_TARGET_TIME, closeToTargetTime)
@@ -72,5 +79,6 @@ class ClockActivity : AppCompatActivity() {
                 .putExtra(FAR_FROM_TARGET_BG_COLOR, farFromTargetBgColor)
                 .putExtra(CLOSE_TO_TARGET_BG_COLOR, closeToTargetBgColor)
                 .putExtra(TARGET_BG_COLOR, targetBgColor)
+                .putExtra(ALLOW_BACK_NAV, allowBackNavigation)
     }
 }

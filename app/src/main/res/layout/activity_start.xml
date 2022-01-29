@@ -217,13 +217,46 @@
             app:constraint_referenced_ids="dial_color, dial_color_label"/>
 
 
+        <TextView
+            android:id="@+id/allow_back_nav_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/below_dial_color_barrier"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/allow_back_nav"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintHorizontal_bias="0"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:text="Zurück beendet die Uhr"
+            android:labelFor="@id/allow_back_nav"/>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/allow_back_nav"
+            android:layout_width="@dimen/min_color_view_width"
+            android:layout_height="@dimen/min_color_view_height"
+            app:layout_constraintTop_toTopOf="@id/allow_back_nav_label"
+            app:layout_constraintBottom_toBottomOf="@id/allow_back_nav_label"
+            app:layout_constraintStart_toEndOf="@id/allow_back_nav_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="8dp"/>
+
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/below_allow_back_nav_barrier"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:barrierDirection="bottom"
+            app:barrierMargin="16dp"
+            app:constraint_referenced_ids="allow_back_nav, allow_back_nav_label"/>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/start_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/below_dial_color_barrier"
+            app:layout_constraintTop_toBottomOf="@id/below_allow_back_nav_barrier"
             android:text="@string/start_button"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>

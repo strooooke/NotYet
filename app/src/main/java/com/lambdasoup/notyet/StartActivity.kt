@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.EditText
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.graphics.toColorInt
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.button.MaterialButton
@@ -21,6 +22,7 @@ private val TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm")
 
 private const val PREF_KEY_TARGET_TIME = "target_time"
 private const val PREF_KEY_PRE_TARGET_MINUTES = "pre_target_minutes"
+private const val PREF_KEY_ALLOW_BACK_NAV = "allow_back_nav"
 private const val PREF_KEY_INITIAL_BG_COLOR = "initial_bg_color"
 private const val PREF_KEY_PRE_TARGET_BG_COLOR = "pre_target_bg_color"
 private const val PREF_KEY_TARGET_BG_COLOR = "target_bg_color"
@@ -29,6 +31,7 @@ private const val PREF_KEY_DIAL_COLOR = "dial_color"
 class StartActivity : AppCompatActivity() {
     private lateinit var targetTime: LocalTime
     private var preTargetMinutes: Int = 0
+    private var allowBackNavigation: Boolean = false
     @ColorInt private var initialBgColor: Int = 0
     @ColorInt private var preTargetBgColor: Int = 0
     @ColorInt private var targetBgColor: Int = 0
@@ -71,6 +74,12 @@ class StartActivity : AppCompatActivity() {
             }
         }
 
+        findViewById<SwitchCompat>(R.id.allow_back_nav).apply {
+            this.setOnCheckedChangeListener { _, isChecked ->
+                allowBackNavigation = isChecked
+            }
+        }
+
         findViewById<MaterialButton>(R.id.initial_bg_color).setOnClickListener {
             showColorPickerFor(this::initialBgColor)
         }
@@ -98,6 +107,7 @@ class StartActivity : AppCompatActivity() {
     private fun restoreInstanceState(savedInstanceState: Bundle) {
         targetTime = LocalTime.parse(savedInstanceState.getString(PREF_KEY_TARGET_TIME))
         preTargetMinutes = savedInstanceState.getInt(PREF_KEY_PRE_TARGET_MINUTES)
+        allowBackNavigation = savedInstanceState.getBoolean(PREF_KEY_ALLOW_BACK_NAV)
         initialBgColor = savedInstanceState.getInt(PREF_KEY_INITIAL_BG_COLOR)
         preTargetBgColor = savedInstanceState.getInt(PREF_KEY_PRE_TARGET_BG_COLOR)
         targetBgColor = savedInstanceState.getInt(PREF_KEY_TARGET_BG_COLOR)
@@ -108,6 +118,7 @@ class StartActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         outState.putString(PREF_KEY_TARGET_TIME, targetTime.format(DateTimeFormatter.ISO_LOCAL_TIME))
         outState.putInt(PREF_KEY_PRE_TARGET_MINUTES, preTargetMinutes)
+        outState.putBoolean(PREF_KEY_ALLOW_BACK_NAV, allowBackNavigation)
         outState.putInt(PREF_KEY_INITIAL_BG_COLOR, initialBgColor)
         outState.putInt(PREF_KEY_PRE_TARGET_BG_COLOR, preTargetBgColor)
         outState.putInt(PREF_KEY_TARGET_BG_COLOR, targetBgColor)
@@ -141,6 +152,8 @@ class StartActivity : AppCompatActivity() {
         targetTime = LocalTime.parse(prefs.getString(PREF_KEY_TARGET_TIME, "10:00"))
         preTargetMinutes = prefs.getInt(PREF_KEY_PRE_TARGET_MINUTES, 5)
 
+        allowBackNavigation = prefs.getBoolean(PREF_KEY_ALLOW_BACK_NAV, false)
+
         initialBgColor = prefs.getInt(PREF_KEY_INITIAL_BG_COLOR, "#a60020".toColorInt())
         preTargetBgColor = prefs.getInt(PREF_KEY_PRE_TARGET_BG_COLOR, "#d88000".toColorInt())
         targetBgColor = prefs.getInt(PREF_KEY_TARGET_BG_COLOR, "#168600".toColorInt())
@@ -151,6 +164,7 @@ class StartActivity : AppCompatActivity() {
         getPreferences(MODE_PRIVATE).edit()
             .putString(PREF_KEY_TARGET_TIME, targetTime.format(DateTimeFormatter.ISO_LOCAL_TIME))
             .putInt(PREF_KEY_PRE_TARGET_MINUTES, preTargetMinutes)
+            .putBoolean(PREF_KEY_ALLOW_BACK_NAV, allowBackNavigation)
             .putInt(PREF_KEY_INITIAL_BG_COLOR, initialBgColor)
             .putInt(PREF_KEY_PRE_TARGET_BG_COLOR, preTargetBgColor)
             .putInt(PREF_KEY_TARGET_BG_COLOR, targetBgColor)
@@ -162,6 +176,8 @@ class StartActivity : AppCompatActivity() {
         findViewById<MaterialButton>(R.id.target_time).text = targetTime.format(TIME_FORMATTER)
 
         findViewById<EditText>(R.id.pre_target_minutes).setText(preTargetMinutes.toString())
+
+        findViewById<SwitchCompat>(R.id.allow_back_nav).isChecked = allowBackNavigation
 
         findViewById<MaterialButton>(R.id.initial_bg_color).backgroundTintList = ColorStateList.valueOf(initialBgColor)
 
@@ -199,6 +215,7 @@ class StartActivity : AppCompatActivity() {
                 farFromTargetBgColor = initialBgColor,
                 closeToTargetBgColor = preTargetBgColor,
                 targetBgColor = targetBgColor,
+                allowBackNavigation = allowBackNavigation
             )
         )
     }
