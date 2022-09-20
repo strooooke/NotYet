@@ -19,3 +19,5 @@ the clock, so that the children won't just press the home button and start watch
 
 Using the app is one-shot: Configure the clock to your liking, then start it. Press back (if not pinned) to exit the app, and
 launch it again for another run.
+
+Needs Android 5.0 or younger to run (people tend to use _old_ phones to give to their children).
